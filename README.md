@@ -2,11 +2,17 @@
 ## Basic AWS Serverless Lambda and Salesforce Authentication Project
 
 Need to fill out these information in the Lambda's environment variables:
+
 process.env.username
+
 process.env.password (with the security token)
+
 process.env.instanceUrl (https://xxx.my.salesforce.com)
+
 process.env.accessToken (token generated after the login authentication)
+
 process.env.endpoint (apexrest endpoint)
+
 process.env.requestBody (JSON object passed in as a body)
 
 ## Steps to upload the function with nodejs:
