@@ -1,5 +1,5 @@
 # AWS-Serverless-Lambda-Salesforce
-Basic AWS Serverless Lambda and Salesforce Authentication Project
+## Basic AWS Serverless Lambda and Salesforce Authentication Project
 
 Need to fill out these information in the Lambda's environment variables:
 process.env.username
@@ -9,7 +9,7 @@ process.env.accessToken (token generated after the login authentication)
 process.env.endpoint (apexrest endpoint)
 process.env.requestBody (JSON object passed in as a body)
 
-Steps to upload the function with nodejs:
+## Steps to upload the function with nodejs:
 
 Install dependencies to the function project folder
 
@@ -29,11 +29,9 @@ Run the command for each module required for your Lambda function.
 
 Note: There's a 250-MB limit on your function size for unzipped files. Only include the libraries you need for your function to work.
 
-Build the deployment package
+## Build the deployment package
 
 ### Windows
-
-Build the deployment package
 
 1.    In File Explorer, open your project folder.
 
