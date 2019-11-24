@@ -31,7 +31,7 @@ Note: There's a 250-MB limit on your function size for unzipped files. Only incl
 
 Build the deployment package
 
-###Windows
+### Windows
 
 Build the deployment package
 
@@ -43,7 +43,7 @@ Build the deployment package
 
 4.    Enter a name for the .zip file.
 
-###Linux / MacOS
+### Linux / MacOS
 
 In the CLI, run this command:
 
@@ -67,7 +67,7 @@ You can also run unzip -l on the .zip file to list its contents, though the outp
 
 3.    Check the output to verify that your files have global read permissions. For more information, including how to fix permissions if needed, see Permissions Policies on Lambda Deployment Packages.
 
-##Upload and verify the deployment package
+## Upload and verify the deployment package
 
 1.    In the Lambda console, choose your function.
 
