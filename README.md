@@ -3,9 +3,9 @@
 
 Need to fill out these information in the Lambda's environment variables:
 
-process.env.username
+process.env.username (Salesforce username)
 
-process.env.password (with the security token)
+process.env.password (Salesforce password+security token)
 
 process.env.instanceUrl (https://xxx.my.salesforce.com)
 
