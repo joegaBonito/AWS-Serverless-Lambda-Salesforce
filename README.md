@@ -88,3 +88,27 @@ Tip: You can also run update-function-code from the AWS Command Line Interface (
 6.    After uploading is finished, choose Test.
 
 Tip: You can also use 7-Zip from the AWS CLI to verify your deployment package's file permissions. Download it from the 7-Zip website. For more information, see Permissions Policies on Lambda Deployment Packages.
+
+## On the browser side
+
+Make sure not to use $.ajax for making RESTful calls due to CORS issue. Use below format instead:
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", Your API Gateway POST endpoint URL, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+    xhr.send(JSON.stringify(body)); //Must be stringified.
+
+## For the Lambda Proxy Integration with API Gateway
+
+Must have the response format exactly as below:
+
+const response = {
+    "isBase64Encoded": false,
+    "statusCode": 200,
+    "headers": {
+    "Access-Control-Allow-Origin" : "*",
+    "Access-Control-Allow-Credentials" : true,
+    "Access-Control-Allow-Methods": "PUT,DELETE,POST,GET,Head,OPTIONS",
+    "Access-Control-Allow-Headers":"*"
+    },
+    "body": JSON.stringify(res)
+};
