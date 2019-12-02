@@ -7,13 +7,17 @@ process.env.username (Salesforce username)
 
 process.env.password (Salesforce password+security token)
 
-process.env.instanceUrl (https://xxx.my.salesforce.com)
-
-process.env.accessToken (token generated after the login authentication)
+process.env.loginUrl (STG: https://test.salesforce.com | PROD: https://login.salesforce.com)
 
 process.env.endpoint (apexrest endpoint)
 
-process.env.requestBody (JSON object passed in as a body)
+process.env.requestBody (JSON object passed in as a body) *Not Required
+
+process.env.consumerKey (Connected App's consumer key)
+
+process.env.consumerSecret (Connected App's consumer secret)
+
+process.env.redirectUri (API Gateway URL with page path followed after stage name)
 
 ## Steps to upload the function with nodejs:
 
@@ -92,9 +96,13 @@ Tip: You can also use 7-Zip from the AWS CLI to verify your deployment package's
 ## On the browser side
 
 Make sure not to use $.ajax for making RESTful calls due to CORS issue. Use below format instead:
+
     var xhr = new XMLHttpRequest();
+
     xhr.open("POST", Your API Gateway POST endpoint URL, true);
+
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+    
     xhr.send(JSON.stringify(body)); //Must be stringified.
 
 ## For the Lambda Proxy Integration with API Gateway
@@ -102,13 +110,22 @@ Make sure not to use $.ajax for making RESTful calls due to CORS issue. Use belo
 Must have the response format exactly as below:
 
 const response = {
+
     "isBase64Encoded": false,
+
     "statusCode": 200,
+
     "headers": {
-    "Access-Control-Allow-Origin" : "*",
-    "Access-Control-Allow-Credentials" : true,
-    "Access-Control-Allow-Methods": "PUT,DELETE,POST,GET,Head,OPTIONS",
-    "Access-Control-Allow-Headers":"*"
+
+        "Access-Control-Allow-Origin" : "*",
+
+        "Access-Control-Allow-Credentials" : true,
+
+        "Access-Control-Allow-Methods": "PUT,DELETE,POST,GET,Head,OPTIONS",
+
+        "Access-Control-Allow-Headers":"*"
+
     },
+
     "body": JSON.stringify(res)
 };

@@ -9,7 +9,7 @@ exports.handler = (event, context,callback) => {
   var loginPromise = new Promise(function(resolve,reject) {
             conn = new jsforce.Connection({
               // you can change loginUrl to connect to sandbox or prerelease env.
-              loginUrl : 'https://test.salesforce.com'
+              loginUrl : process.env.loginUrl
             });
             conn.login(process.env.username, process.env.password, function(err, userInfo) {
               if (err) {
