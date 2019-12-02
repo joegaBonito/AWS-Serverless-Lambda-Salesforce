@@ -19,6 +19,20 @@ process.env.consumerSecret (Connected App's consumer secret)
 
 process.env.redirectUri (API Gateway URL with page path followed after stage name)
 
+## In Salesforce Connected Apps
+
+Selected OAuth Scopes: 
+
+    Access your basic information (id, profile, email, address, phone)
+
+    Access and manage your data (api)
+
+    Provide access to your data via the Web (web)
+
+    Perform requests on your behalf at any time (refresh_token, offline_access)
+
+Callback URL: Should match process.env.redirectUri 
+
 ## Steps to upload the function with nodejs:
 
 Install dependencies to the function project folder
@@ -93,7 +107,7 @@ Tip: You can also run update-function-code from the AWS Command Line Interface (
 
 Tip: You can also use 7-Zip from the AWS CLI to verify your deployment package's file permissions. Download it from the 7-Zip website. For more information, see Permissions Policies on Lambda Deployment Packages.
 
-## On the browser side
+## On the client side
 
 Make sure not to use $.ajax for making RESTful calls due to CORS issue. Use below format instead:
 
@@ -102,7 +116,7 @@ Make sure not to use $.ajax for making RESTful calls due to CORS issue. Use belo
     xhr.open("POST", Your API Gateway POST endpoint URL, true);
 
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-    
+
     xhr.send(JSON.stringify(body)); //Must be stringified.
 
 ## For the Lambda Proxy Integration with API Gateway
