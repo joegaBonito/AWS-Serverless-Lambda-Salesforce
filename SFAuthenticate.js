@@ -84,7 +84,7 @@ exports.handler = (event, context,callback) => {
    */
   
   var bucketName = process.env.bucketName;
-  var keyName = 'LambdaLogs/' + 'RequestBody_' + new Date().toString() + '.json';
+  var keyName = process.env.folderPath + '/' + 'RequestBody_' + new Date().toString() + '.json';
   console.log('keyName:  ' + keyName);
   var content = JSON.stringify(body);
   console.log('content:  ' + content);
@@ -121,7 +121,7 @@ exports.handler = (event, context,callback) => {
      * Generates the file based on the lambda response and stores it to a S3 bucket.
      */
     var bucketName = process.env.bucketName;
-    var keyName = 'LambdaLogs/' + 'Response_' + new Date().toString() + '.json';
+    var keyName = process.env.folderPath + '/' + 'Response_' + new Date().toString() + '.json';
     console.log('keyName:  ' + keyName);
     var content = escapedResJSONString;
     console.log('content:  ' + content);

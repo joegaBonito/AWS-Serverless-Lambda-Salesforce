@@ -21,6 +21,8 @@ process.env.redirectUri (API Gateway URL with page path followed after stage nam
 
 process.env.bucketName (Destination bucket to store LambdaLogs)
 
+process.env.folderPath (Folder path to store LambdaLogs)
+
 ## In Salesforce Connected Apps
 
 Selected OAuth Scopes: 
