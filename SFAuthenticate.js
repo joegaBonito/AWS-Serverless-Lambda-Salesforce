@@ -1,4 +1,6 @@
 console.log('Loading function');
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
 var jsforce = require('jsforce');
 var conn;
 
@@ -56,6 +58,9 @@ exports.handler = (event, context,callback) => {
     });
 
 
+  /**
+   * Handles and formats RequestBody.
+   */
   console.log('event ======>' + event);
   var body;
   if(typeof event ==  "string") {
@@ -74,6 +79,24 @@ exports.handler = (event, context,callback) => {
     console.log('If body is string is called, and the body is pared like ===> ' + body);
   }
 
+  /**
+   * Generates the file based on the lambda Request Body and stores it to a S3 bucket.
+   */
+  var bucketName = process.env.bucketName;
+  var keyName = 'LambdaLogs/' + 'RequestBody_' + new Date().toString() + '.txt';
+  console.log('keyName:  ' + keyName);
+  var content = 'RequestBody ===> ' + JSON.stringify(body);
+  console.log('content:  ' + content);
+
+  var params = { Bucket: bucketName, Key: keyName, Body: content };
+    
+  s3.putObject(params, function (err, data) {
+    if (err)
+        console.log(err)
+    else
+        console.log("Successfully saved object to " + bucketName + "/" + keyName);
+  });
+
   conn.apex.post(process.env.endpoint, body, function(err, res) {
     if (err) {  
       callback(err);
@@ -90,6 +113,25 @@ exports.handler = (event, context,callback) => {
       },
       "body": JSON.stringify(res)
     };
+
+    /**
+     * Generates the file based on the lambda response and stores it to a S3 bucket.
+     */
+    var bucketName = process.env.bucketName;
+    var keyName = 'LambdaLogs/' + 'Response_' + new Date().toString() + '.txt';
+    console.log('keyName:  ' + keyName);
+    var content = 'Response ===> ' + JSON.stringify(res);
+    console.log('content:  ' + content);
+
+    var params = { Bucket: bucketName, Key: keyName, Body: content };
+        
+    s3.putObject(params, function (err, data) {
+        if (err)
+            console.log(err)
+        else
+            console.log("Successfully saved object to " + bucketName + "/" + keyName);
+    });
+
     callback(null,response);
   });
   }).catch(function(e) {
