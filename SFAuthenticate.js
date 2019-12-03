@@ -82,10 +82,11 @@ exports.handler = (event, context,callback) => {
   /**
    * Generates the file based on the lambda Request Body and stores it to a S3 bucket.
    */
+  
   var bucketName = process.env.bucketName;
-  var keyName = 'LambdaLogs/' + 'RequestBody_' + new Date().toString() + '.txt';
+  var keyName = 'LambdaLogs/' + 'RequestBody_' + new Date().toString() + '.json';
   console.log('keyName:  ' + keyName);
-  var content = 'RequestBody ===> ' + JSON.stringify(body);
+  var content = JSON.stringify(body);
   console.log('content:  ' + content);
 
   var params = { Bucket: bucketName, Key: keyName, Body: content };
@@ -101,7 +102,9 @@ exports.handler = (event, context,callback) => {
     if (err) {  
       callback(err);
     }
-    console.log("response: ", res);
+    var resJSONString = JSON.stringify(res);
+    var escapedResJSONString = resJSONString.escapeSpecialChars();
+    console.log("response: ", escapedResJSONString);
     const response = {
       "isBase64Encoded": false,
       "statusCode": 200,
@@ -111,16 +114,16 @@ exports.handler = (event, context,callback) => {
         "Access-Control-Allow-Methods": "PUT,DELETE,POST,GET,Head,OPTIONS",
         "Access-Control-Allow-Headers":"*"
       },
-      "body": JSON.stringify(res)
+      "body": escapedResJSONString
     };
 
     /**
      * Generates the file based on the lambda response and stores it to a S3 bucket.
      */
     var bucketName = process.env.bucketName;
-    var keyName = 'LambdaLogs/' + 'Response_' + new Date().toString() + '.txt';
+    var keyName = 'LambdaLogs/' + 'Response_' + new Date().toString() + '.json';
     console.log('keyName:  ' + keyName);
-    var content = 'Response ===> ' + JSON.stringify(res);
+    var content = escapedResJSONString;
     console.log('content:  ' + content);
 
     var params = { Bucket: bucketName, Key: keyName, Body: content };
@@ -137,4 +140,21 @@ exports.handler = (event, context,callback) => {
   }).catch(function(e) {
     callback(e);
   });
+
+
+  /**
+   * Escaping Special Character using this prototype function.
+   */
+  String.prototype.escapeSpecialChars = function() {
+    return this.replace(/\\n/g, "\n")
+               .replace(/\\'/g, "\'")
+               .replace(/\\"/g, '\"')
+               .replace(/\\&/g, "\&")
+               .replace(/\\r/g, "\r")
+               .replace(/\\t/g, "\t")
+               .replace(/\\b/g, "\b")
+               .replace(/\\f/g, "\f")
+               .replace('\"{','{')
+               .replace('\}"','}');
+  };
 };
