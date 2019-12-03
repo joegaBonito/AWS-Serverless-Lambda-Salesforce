@@ -19,6 +19,8 @@ process.env.consumerSecret (Connected App's consumer secret)
 
 process.env.redirectUri (API Gateway URL with page path followed after stage name)
 
+process.env.bucketName (Destination bucket to store LambdaLogs)
+
 ## In Salesforce Connected Apps
 
 Selected OAuth Scopes: 
