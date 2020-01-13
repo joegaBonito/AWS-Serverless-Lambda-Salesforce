@@ -99,23 +99,6 @@ exports.handler = (event, context,callback) => {
   });
 
   conn.apex.post(process.env.endpoint, body, function(err, res) {
-    if (err) {  
-      callback(err);
-    }
-    var resJSONString = JSON.stringify(res);
-    var escapedResJSONString = resJSONString.escapeSpecialChars();
-    console.log("response: ", escapedResJSONString);
-    const response = {
-      "isBase64Encoded": false,
-      "statusCode": 200,
-      "headers": {
-        "Access-Control-Allow-Origin" : "*",
-        "Access-Control-Allow-Credentials" : true,
-        "Access-Control-Allow-Methods": "PUT,DELETE,POST,GET,Head,OPTIONS",
-        "Access-Control-Allow-Headers":"*"
-      },
-      "body": escapedResJSONString
-    };
 
     /**
      * Generates the file based on the lambda response and stores it to a S3 bucket.
@@ -123,8 +106,54 @@ exports.handler = (event, context,callback) => {
     var bucketName = process.env.bucketName;
     var keyName = process.env.folderPath + '/' + 'Response_' + new Date().toString() + '.json';
     console.log('keyName:  ' + keyName);
-    var content = escapedResJSONString;
+    var content;
     console.log('content:  ' + content);
+    var response;
+    if (err) {  
+      /**
+       * Generates the error file.
+       */
+      keyName = process.env.folderPath + '/' + 'Response_' + new Date().toString() + '.txt';
+      console.log('error keyName:  ' + keyName);
+      content = err.toString();
+      console.log('error content:  ' + content);
+
+      response = {
+        "isBase64Encoded": false,
+        "statusCode": 502,
+        "headers": {
+          "Access-Control-Allow-Origin" : "*",
+          "Access-Control-Allow-Credentials" : true,
+          "Access-Control-Allow-Methods": "PUT,DELETE,POST,GET,Head,OPTIONS",
+          "Access-Control-Allow-Headers":"*"
+        },
+        "body": err
+      };
+    } else {
+      var resJSONString = JSON.stringify(res);
+      var escapedResJSONString = resJSONString.escapeSpecialChars();
+      console.log("response: ", escapedResJSONString);
+      
+      /**
+       * Generates the file based on the lambda response and stores it to a S3 bucket.
+       */
+      keyName = process.env.folderPath + '/' + 'Response_' + new Date().toString() + '.json';
+      console.log('keyName:  ' + keyName);
+      content = escapedResJSONString;
+      console.log('content:  ' + content);
+
+      response = {
+        "isBase64Encoded": false,
+        "statusCode": 200,
+        "headers": {
+          "Access-Control-Allow-Origin" : "*",
+          "Access-Control-Allow-Credentials" : true,
+          "Access-Control-Allow-Methods": "PUT,DELETE,POST,GET,Head,OPTIONS",
+          "Access-Control-Allow-Headers":"*"
+        },
+        "body": escapedResJSONString
+      };
+    }
 
     var params = { Bucket: bucketName, Key: keyName, Body: content };
         
